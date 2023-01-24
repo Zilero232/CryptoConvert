@@ -1,41 +1,21 @@
+import { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useDispatch, useSelector } from "react-redux";
+import Spinner from "../Spinner";
 import { Navigation } from "swiper";
 import "swiper/css";
 
-const slider = [
-  {
-    title: `Очень крутая обменка с лучшей тех поддержкой. рекомендую всем) Очень крутая обменка с лучшей тех поддержкой. рекомендую всем)`,
-    date: "2 января 2023 – 14:32",
-    name: "Ярослав",
-  },
-  {
-    title: `Очень крутая обменка с лучшей тех поддержкой. рекомендую всем) Очень крутая обменка с лучшей тех поддержкой. рекомендую всем)`,
-    date: "2 января 2023 – 14:32",
-    name: "Ярослав",
-  },
-  {
-    title: `Очень крутая обменка с лучшей тех поддержкой. рекомендую всем) Очень крутая обменка с лучшей тех поддержкой. рекомендую всем)`,
-    date: "2 января 2023 – 14:32",
-    name: "Ярослав",
-  },
-  {
-    title: `Очень крутая обменка с лучшей тех поддержкой. рекомендую всем) Очень крутая обменка с лучшей тех поддержкой. рекомендую всем)`,
-    date: "2 января 2023 – 14:32",
-    name: "Ярослав",
-  },
-  {
-    title: `Очень крутая обменка с лучшей тех поддержкой. рекомендую всем) Очень крутая обменка с лучшей тех поддержкой. рекомендую всем)`,
-    date: "2 января 2023 – 14:32",
-    name: "Ярослав",
-  },
-  {
-    title: `Очень крутая обменка с лучшей тех поддержкой. рекомендую всем) Очень крутая обменка с лучшей тех поддержкой. рекомендую всем)`,
-    date: "2 января 2023 – 14:32",
-    name: "Ярослав",
-  },
-];
+import { fetchReviews } from "../../redux/reviews/asyncActions";
+import { selectReviews } from "../../redux/reviews/selectors";
 
 const ReccalsSlider = () => {
+  const dispatch = useDispatch();
+  const { reviews, loading } = useSelector(selectReviews);
+
+  useEffect(() => {
+    dispatch(fetchReviews());
+  }, []);
+
   return (
     <section className="main__recalls recalls" id="recalls">
       <div className="container">
@@ -55,41 +35,45 @@ const ReccalsSlider = () => {
               <img src={require("../../assets/images/recalls-arrow.png")} alt="arrow" />
             </button>
           </div>
-          <Swiper
-            modules={[Navigation]}
-            navigation={{
-              nextEl: ".recalls-swiper-button-next",
-              prevEl: ".recalls-swiper-button-prev",
-            }}
-            spaceBetween={50}
-            slidesPerView={3}
-            className="recalls-swiper swiper"
-          >
-            {slider.map((item, idx) => {
-              return (
-                <SwiperSlide key={idx} className="recalls-slide swiper-slide">
-                  <div className="recalls-slide__box recalls-slide-box">
-                    <div className="recalls-slide-box__top recalls-slide-box-top">
-                      <p className="recalls-slide-box-top__text" data-aos="fade-up" data-aos-duration="1250">
-                        {item.title}
-                      </p>
-                      <p className="recalls-slide-box-top__date" data-aos="fade-up" data-aos-duration="1500">
-                        {item.date}
-                      </p>
-                    </div>
-                    <div className="recalls-slide-box__bottom" data-aos="fade-up" data-aos-duration="1750">
-                      <img
-                        className="recalls-slide-box__bottom-img"
-                        src={require("../../assets/images/recalls-person.png")}
-                        alt="person"
-                      />
-                      <p className="recalls-slide-box__bottom-name">{item.name}</p>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+          <div className="main__recalls-wrapper">
+            {
+              loading ? <Spinner /> : <Swiper
+                modules={[Navigation]}
+                navigation={{
+                  nextEl: ".recalls-swiper-button-next",
+                  prevEl: ".recalls-swiper-button-prev",
+                }}
+                spaceBetween={50}
+                slidesPerView={3}
+                className="recalls-swiper swiper"
+              >
+                {reviews.map((item, idx) => {
+                  return (
+                    <SwiperSlide key={idx} className="recalls-slide swiper-slide">
+                      <div className="recalls-slide__box recalls-slide-box">
+                        <div className="recalls-slide-box__top recalls-slide-box-top">
+                          <p className="recalls-slide-box-top__text" data-aos="fade-up" data-aos-duration="1250">
+                            {item.title}
+                          </p>
+                          <p className="recalls-slide-box-top__date" data-aos="fade-up" data-aos-duration="1500">
+                            {item.date}
+                          </p>
+                        </div>
+                        <div className="recalls-slide-box__bottom" data-aos="fade-up" data-aos-duration="1750">
+                          <img
+                            className="recalls-slide-box__bottom-img"
+                            src={require("../../assets/images/recalls-person.png")}
+                            alt="person"
+                          />
+                          <p className="recalls-slide-box__bottom-name">{item.name}</p>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            }
+          </div>
         </div>
       </div>
     </section>

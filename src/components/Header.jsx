@@ -1,30 +1,9 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const Links = [
-  {
-    title: "Отзывы",
-    link: "#recalls",
-  },
-  {
-    title: "Партнёрам",
-    link: "/partners",
-  },
-  {
-    title: "Правила обмена",
-    link: "/rules",
-  },
-  {
-    title: "AML/KYC",
-    link: "/policy",
-  },
-  {
-    title: "О сервесе",
-    link: "/about",
-  },
-];
-
 const Header = () => {
+  const { languages } = useSelector((state) => state.language);
   const [isOpenLanguage, setOpenLanguage] = useState(false);
   const [isActiveLanguage, setActiveLanguage] = useState("ru");
 
@@ -124,7 +103,7 @@ const Header = () => {
             </svg>
             <nav className="header__navigation navigation">
               <ul className="navigation__list">
-                {Links.map((item, idx) => {
+                {languages.menu && languages.menu[isActiveLanguage].map((item, idx) => {
                   return (
                     <li key={idx} className="navigation__list-item">
                       <Link className="navigation__list-link" to={item.link}>
